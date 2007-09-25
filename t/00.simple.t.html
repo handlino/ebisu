@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <script src="lib/jsan/Test/Builder.js"></script>
+        <script src="lib/jsan/Test/Simple.js"></script>
+
+        <script src="../lib/jquery-1.2.js"></script>
+        <script src="../lib/Ebisu.js"></script>
+
+        <script type="text/javascript">
+
+var hello_function = function(name) {
+    if (name != null) {
+        $(this).html("Hello, " + name );
+    }
+    else {
+        $(this).html("Hello, world");
+    }
+};
+
+Ebisu("foobar", "#e1").attach(hello_function);
+Ebisu("foobar", "#e2").attach(hello_function);
+Ebisu("baz", "#e1").attach(hello_function);
+
+        </script>
+
+    </head>
+    <body>
+      <div id="e1"></div>
+      <div id="e2"></div>
+
+      <pre id="test">
+        <script type="text/javascript">
+
+plan({tests: 5});
+
+Ebisu("foobar");
+ok("Hello, world" == $("#e1").html());
+ok("Hello, world" == $("#e2").html());
+
+Ebisu("foobar", ["Nihao"]);
+ok("Hello, Nihao" == $("#e1").html());
+ok("Hello, Nihao" == $("#e2").html());
+
+Ebisu("baz", ["Nihao Baz"]);
+ok("Hello, Nihao Baz" == $("#e1").html());
+
+        </script>
+      </pre>
+    </body>
+</html>
+
