@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script src="lib/jsan/Test/Builder.js"></script>
+        <script src="lib/jsan/Test/More.js"></script>
+
+        <script src="../lib/jquery-1.2.js"></script>
+        <script src="../lib/Ebisu.js"></script>
+        <script src="../lib/jquery.ebisu.js"></script>
+
+    </head>
+    <body>
+      <div id="e1"></div>
+      <div id="e2"></div>
+
+      <pre id="test">
+        <script type="text/javascript">
+
+plan({tests: 1});
+
+var hello_function = function(name) {
+    if (name != null) {
+        $(this).html("Hello, " + name );
+    }
+    else {
+        $(this).html("Hello, world");
+    }
+};
+
+$("#e1").Ebisu("foobar").attach(hello_function);
+Ebisu("foobar");
+
+is($("#e1").html(), "Hello, world");
+
+        </script>
+      </pre>
+    </body>
+</html>
+
