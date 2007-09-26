@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <script src="lib/jsan/Test/Builder.js"></script>
+        <script src="lib/jsan/Test/Simple.js"></script>
+
+        <script src="../lib/Ebisu.js"></script>
+
+        <script type="text/javascript">
+
+var hello_function = function(name) {
+    if (name != null) {
+        this.innerHTML = "Hello, " + name;
+    }
+    else {
+        this.innerHTML = "Hello, world"
+    }
+};
+
+Ebisu("foobar", "e1").attach(hello_function);
+Ebisu("foobar", "e2").attach(hello_function);
+Ebisu("baz", "e1").attach(hello_function);
+
+        </script>
+
+    </head>
+    <body>
+      <div id="e1"></div>
+      <div id="e2"></div>
+
+      <pre id="test">
+        <script type="text/javascript">
+
+plan({tests: 4});
+
+var e1 = document.getElementById("e1");
+var e2 = document.getElementById("e2");
+
+Ebisu("foobar");
+ok("Hello, world" == e1.innerHTML);
+ok("Hello, world" == e2.innerHTML);
+
+Ebisu("foobar", ["Nihao"]);
+ok("Hello, Nihao" == e1.innerHTML);
+ok("Hello, Nihao" == e2.innerHTML);
+
+        </script>
+      </pre>
+    </body>
+</html>
+
