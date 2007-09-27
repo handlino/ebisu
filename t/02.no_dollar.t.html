@@ -1,7 +1,7 @@
 <html>
     <head>
         <script src="lib/jsan/Test/Builder.js"></script>
-        <script src="lib/jsan/Test/Simple.js"></script>
+        <script src="lib/jsan/Test/More.js"></script>
 
         <script src="../lib/Ebisu.js"></script>
 
@@ -16,9 +16,9 @@ var hello_function = function(name) {
     }
 };
 
-Ebisu("foobar", "e1").attach(hello_function);
-Ebisu("foobar", "e2").attach(hello_function);
-Ebisu("baz", "e1").attach(hello_function);
+Ebisu("foobar").to("e1").attach(hello_function);
+Ebisu("foobar").to("e2").attach(hello_function);
+Ebisu("baz").to("e1").attach(hello_function);
 
         </script>
 
@@ -35,13 +35,13 @@ plan({tests: 4});
 var e1 = document.getElementById("e1");
 var e2 = document.getElementById("e2");
 
-Ebisu("foobar");
-ok("Hello, world" == e1.innerHTML);
-ok("Hello, world" == e2.innerHTML);
+Ebisu("foobar").trigger();
+is(e1.innerHTML, "Hello, world");
+is(e2.innerHTML, "Hello, world");
 
-Ebisu("foobar", ["Nihao"]);
-ok("Hello, Nihao" == e1.innerHTML);
-ok("Hello, Nihao" == e2.innerHTML);
+Ebisu("foobar").trigger("Nihao");
+ok(e1.innerHTML, "Hello, Nihao");
+ok(e2.innerHTML, "Hello, Nihao");
 
         </script>
       </pre>

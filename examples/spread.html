@@ -43,14 +43,15 @@ $("div.fire").css({
 });
 
 function texture(i, power) {
-    var left = gwidth/2 + i * Math.pow(Math.sin(i), power) % gwidth/2 ;
-    var top  = gheight/2 + i * Math.pow(Math.cos(i), power) % gheight/2 ;
+    var m = Math.pow(-1, i) * i;
+    var left = gwidth/2 + m * Math.pow(Math.sin(i), power) % gwidth/2 ;
+    var top  = gheight/2 + m * Math.pow(Math.cos(i), power) % gheight/2 ;
     return [left, top];
 }
 
 Ebisu("fire").to('div.fire').attach(
     function() {
-        var power = 1 + (Math.random() * 7 | 0) * 2;
+        var power = (Math.random() * 10 | 0);
         $("#fire").append("<br>type " + power);
         this.each(
             function(i) {
@@ -63,10 +64,10 @@ Ebisu("fire").to('div.fire').attach(
                                 'left': left,
                                 'top': top
                             },
-                            1000
+                            6000
                         )
                     },
-                    i * 10
+                    i * 100
                 );
             }
         );
