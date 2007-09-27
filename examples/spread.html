@@ -30,25 +30,26 @@ a#fire {
     <div id="sky"></div>
     <script type="text/javascript">
 
-for(var i = 0;i < 500; i++) {
+var total = 1000;
+for(var i = 0;i < total; i++) {
     $("<div class='fire'> </div>").appendTo("#sky");
 }
 
-$('div.fire').each(function(i) {
-    var left = 500 + i * Math.sin(i) * Math.sin(i);
-    var top  = 300 + i * Math.sin(i) * Math.cos(i);
-    Ebisu("fire", $(this)).attach(function() {
+var i=0;
+Ebisu("fire").to('div.fire').attach(
+    function() {
+        var left = 500 + i/(total/500) * Math.sin(i);
+        var top  = 300 + i/(total/500) * Math.cos(i);
         var self = this;
         setTimeout(function() {
-            $(self).animate({
-                'left': left, 'top': top
-            }, 6000);
-        }, i * 100);
-    })
-});
+            $(self).animate({'left': left, 'top': top}, 12000);
+        }, i * 100 ) ;
+        i++;
+    }
+);
 
 $("#fire").click(function() {
-    Ebisu("fire");
+    Ebisu("fire").trigger();
 })
 
     </script>

@@ -25,12 +25,12 @@ var hello_function = function(name) {
 };
 
 var e1 = document.getElementById("e1");
-Ebisu("foobar", e1).attach(hello_function);
+Ebisu("foobar").to(e1).attach(hello_function);
 
-Ebisu("foobar");
+Ebisu("foobar").trigger();
 is(e1.innerHTML, "Hello, world");
 
-Ebisu("foobar", ["Nihao"]);
+Ebisu("foobar").trigger("Nihao");
 is(e1.innerHTML, "Hello, Nihao");
 
         </script>

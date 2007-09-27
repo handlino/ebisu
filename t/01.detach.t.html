@@ -17,8 +17,8 @@ var hello_function = function(name) {
     }
 };
 
-Ebisu("foobar", "#e1").attach(hello_function);
-Ebisu("foobar", "#e2").attach(hello_function);
+Ebisu("foobar").to("#e1").attach(hello_function);
+Ebisu("foobar").to("#e2").attach(hello_function);
         </script>
 
     </head>
@@ -31,12 +31,12 @@ Ebisu("foobar", "#e2").attach(hello_function);
 
 plan({tests: 4});
 
-Ebisu("foobar", ["Nihao"]);
+Ebisu("foobar").trigger("Nihao");
 ok("Hello, Nihao" == $("#e1").html());
 ok("Hello, Nihao" == $("#e2").html());
 
-Ebisu("foobar", "#e1").detach();
-Ebisu("foobar");
+Ebisu("foobar").to("#e1").detach();
+Ebisu("foobar").trigger();
 ok("Hello, Nihao" == $("#e1").html());
 ok("Hello, world" == $("#e2").html());
 
