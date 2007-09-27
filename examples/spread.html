@@ -9,12 +9,12 @@ body {
     background:black;
 }
 .fire {
-    width:5px;
-    height:5px;
-    -moz-border-radius:5px;
+    width:2px;
+    height:2px;
+    border:1px solid #999;
     position:absolute;
-    top:300px;
-    left:0;
+    bottom:0;
+    right:0;
     background:#fff;
     color:red;
 }
@@ -30,27 +30,69 @@ a#fire {
     <div id="sky"></div>
     <script type="text/javascript">
 
-var total = 1000;
+var gwidth = $(window).width() - 30;
+var gheight = $(window).height() - 30;
+var total = 1800;
 for(var i = 0;i < total; i++) {
     $("<div class='fire'> </div>").appendTo("#sky");
 }
 
-var i=0;
+$("div.fire").css({
+    'left': gwidth,
+    'top': gheight
+});
+
+function texture(i, power) {
+    var left = gwidth/2 + i * Math.pow(Math.sin(i), power) % gwidth/2 ;
+    var top  = gheight/2 + i * Math.pow(Math.cos(i), power) % gheight/2 ;
+    return [left, top];
+}
+
 Ebisu("fire").to('div.fire').attach(
     function() {
-        var left = 500 + i/(total/500) * Math.sin(i);
-        var top  = 300 + i/(total/500) * Math.cos(i);
-        var self = this;
-        setTimeout(function() {
-            $(self).animate({'left': left, 'top': top}, 12000);
-        }, i * 100 ) ;
-        i++;
+        var power = 1 + (Math.random() * 7 | 0) * 2;
+        $("#fire").append("<br>type " + power);
+        this.each(
+            function(i) {
+                var [left, top] = texture(i, power);
+                var self = this;
+                setTimeout(
+                    function() {
+                        $(self).animate(
+                            {
+                                'left': left,
+                                'top': top
+                            },
+                            1000
+                        )
+                    },
+                    i * 10
+                );
+            }
+        );
     }
 );
 
-$("#fire").click(function() {
-    Ebisu("fire").trigger();
+Ebisu("unfire").to('div.fire').attach(function() {
+    this.css({
+        'left': gwidth,
+        'top': gheight
+    });
 })
+
+var do_spread = function() {
+    $("#fire").unbind("click").click(undo_spread)
+    .text("Click Here To Revert");
+    Ebisu("fire").trigger();
+};
+
+var undo_spread = function() {
+    $("#fire").unbind("click").click(do_spread)
+    .text("Click Here To Start");
+    Ebisu("unfire").trigger();
+}
+
+$("#fire").click(do_spread);
 
     </script>
   </body>
