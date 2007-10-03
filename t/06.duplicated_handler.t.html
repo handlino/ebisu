@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script src="lib/jsan/Test/Builder.js"></script>
+        <script src="lib/jsan/Test/More.js"></script>
+
+        <script src="../lib/jquery-1.2.js"></script>
+        <script src="../lib/Ebisu.js"></script>
+
+    </head>
+    <body>
+      <div id="e1"></div>
+      <div id="e2"></div>
+
+      <pre id="test">
+        <script type="text/javascript">
+
+plan({tests: 2});
+
+var i = 0;
+
+var set_foobar_handler = function() {
+    Ebisu("foobar").attach(function() { i = i + 1; });
+}
+
+set_foobar_handler();
+set_foobar_handler();
+
+Ebisu("foobar").trigger();
+
+is(i, 1, "var i is only incremented once.");
+
+i = 0;
+Ebisu("t2").attach(function() { i = i + 1; });
+Ebisu("t2").attach(function() { i = i + 1; });
+Ebisu("t2").attach(function() { i = i + 1; });
+Ebisu("t2").trigger();
+is(i, 1, "var i is only incremented once.");
+
+        </script>
+      </pre>
+    </body>
+</html>
+
