@@ -1,0 +1,183 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8"></meta>
+    <script src="../lib/jquery-1.2.js"></script>
+    <script src="../lib/Ebisu.js"></script>
+    <title>Chase On Field</title>
+<style type="text/css">
+body {
+    background:black;
+    color:white;
+}
+.chaser {
+    -moz-border-radius: 100px;
+    width: 20px;
+    height:20px;
+    position:absolute;
+    background:#fcc;
+    color:red;
+    z-index: 5;
+}
+.grid {
+    -moz-border-radius: 100px;
+    width: 20px;
+    height:20px;
+    position:absolute;
+    background:#3c3;
+    color:red;
+    z-index: 5;
+}
+#field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+};
+
+</style>
+  </head>
+  <body>
+    <p>Move your mouse randomly. Watch the green ones been pushed away by the pink ones.</p>
+    <div id="field"></div>
+    <script type="text/javascript">
+
+var gwidth = $(window).width() - 200;
+var gheight = $(window).height() - 200;
+
+var randompos = function(axis) {
+    return Math.random() * ( axis == "x" ? gwidth : gheight  ) + 100;
+};
+
+for(var i = 0;i < 100; i++) {
+    $("<div class='grid' id='grid-" + i + "'></div>").appendTo("#field");
+}
+
+var total = 8;
+for(var i = 0;i < total; i++) {
+    $("<div class='chaser' id='chaser-" + i + "'></div>").appendTo("#field");
+}
+
+Ebisu("spread").to(".chaser").attach(function() {
+    this.each(function() {
+        var x = randompos("x");
+        var y = randompos("y");
+        $(this).css({ left: x, top: y });
+    });
+});
+
+$(document).ready(function($) {
+    Ebisu("spread").trigger();
+
+    $(".grid").each(function() {
+        var x = randompos("x");
+        var y = randompos("y");
+        $(this).css({ left: x, top: y });
+        Ebisu("chaser near").to(this).attach(function(loc_x, loc_y) {
+            var dx = loc_x - x;
+            var dy = loc_y - y;
+            if ( Math.abs(dx) + Math.abs(dy) < 50 ) {
+                x = x - dx/8;
+                y = y - dy/8;
+                $(this).css({ left: x, top: y });
+            }
+        });
+    });
+
+    var mouse_x;
+    var mouse_y;
+    var mouse_x2;
+    var mouse_y2;
+
+    var mouse_still = true;
+
+    $("#field").click(function(e) {
+        Ebisu("spread").trigger();
+    });
+
+    $("#field").mousemove(
+        function(e) {
+            mouse_x = e.clientX;
+            mouse_y = e.clientY;
+
+            (function(x, y) {
+                setTimeout(function() {
+                    Ebisu("mouse near").trigger(x,y);
+                },0);
+            })(e.clientX, e.clientY);
+        }
+    );
+
+    Ebisu("mouse still").attach(function(x, y) {
+        Ebisu("mouse near").trigger(x, y);
+    });
+
+    setInterval(function() {
+        var still = true;
+        if (mouse_x != mouse_x2) {
+            mouse_x2 = mouse_x;
+            still = false;
+        }
+        if (mouse_y != mouse_y2) {
+            mouse_y2 = mouse_y;
+            still = false;
+        }
+        if (still == true) {
+            Ebisu("mouse still").trigger(mouse_x, mouse_y);
+        }
+    }, 25);
+
+    var drift = function(i) {
+        return (Math.random() * 2 ) - 1;
+    };
+
+    var chase =  function(loc_x, loc_y, i) {
+        var self = this;
+        var x = this.offsetLeft;
+        var y = this.offsetTop;
+
+        var dx = loc_x - x;
+        var dy = loc_y - y;
+
+        var v  = i + 5;
+
+        if (dx != 0) {
+            dx = Math.abs(dx) / dx;
+        }
+
+
+        if (dy != 0) {
+            dy = Math.abs(dy) / dy;
+        }
+
+        x = x + dx * v;
+        y = y + dy * v;
+
+        setTimeout(
+            (function(self, x, y) {
+                return function() {
+                    $(self).css({left: x, top: y});
+                }
+            })(self, x, y)
+            , 25
+        );
+
+        Ebisu("chaser near").trigger(x, y);
+    }
+
+    Ebisu("mouse near").to(".chaser").attach(
+        function(x, y) {
+            this.each(function(i) {
+                chase.apply(this, [x, y, i]);
+            });
+        }
+    );
+
+});
+
+
+    </script>
+  </body>
+</html>
