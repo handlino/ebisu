@@ -11,12 +11,12 @@ body {
 }
 .fire {
     -moz-border-radius: 100px;
-    width:5px;
-    height:5px;
+    width:1px;
+    height:1px;
     position:absolute;
     bottom:0;
     right:0;
-    background:#fff;
+    background:#555;
     color:red;
     z-index: 5;
 }
@@ -39,7 +39,7 @@ body {
 
 var gwidth = $(window).width() - 200;
 var gheight = $(window).height() - 200;
-var total = 100;
+var total = 200;
 for(var i = 0;i < total; i++) {
     $("<div class='fire'> </div>").appendTo("#field");
 }
@@ -52,27 +52,40 @@ $(document).ready(function($) {
     );
 
     $("div.fire").each(function(i) {
-
-        var x = Math.random() * gwidth  + 100;
+        var x = Math.random() * gwidth + 100;
         var y = Math.random() * gheight + 100;
 
-        $(this).css({
-            left: x,
-            top: y
-        });
+        $(this).css({ left: x, top: y });
 
         Ebisu("mouse near").to(this).attach(
             function(x, y) {
                 return function(loc_x, loc_y) {
-                    var diffx = Math.abs(loc_x - x);
-                    var diffy = Math.abs(loc_y - y);
-                    var r = Math.floor( 400 / (diffx + diffy + 4) ) ;
-                    $(this).css({
-                        width: r,
-                        height: r,
-                        'margin-top': (r / -2),
-                        'margin-left': (r / -2)
-                    });
+                    var diffx = Math.pow( Math.abs(loc_x - x) , 2);
+                    var diffy = Math.pow( Math.abs(loc_y - y) , 2);
+                    var r = 200 / (5 + Math.sqrt( diffx + diffy ) );
+                    var self = this;
+
+                    setTimeout(function() {
+                        if (r < 1) {
+                            $(self).css({
+                                background: "#555",
+                                width: 1,
+                                height: 1,
+                                'margin-top': 1,
+                                'margin-left': 1
+                            })
+                        }
+                        else {
+                            $(self).css({
+                                background: "#fff",
+                                width: r,
+                                height: r,
+                                'margin-top': (r / -2),
+                                'margin-left': (r / -2)
+                            });
+                        }
+                    }, 0 );
+
                 }
             }(x,y)
         );
