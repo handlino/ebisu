@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html;charset=utf8"></meta>
+    <script src="../lib/jquery-1.2.js"></script>
+    <script src="../lib/Ebisu.js"></script>
+    <title>Chase</title>
+<style type="text/css">
+body {
+    background:black;
+    color:white;
+}
+.chaser {
+    -moz-border-radius: 100px;
+    width: 10px;
+    height:10px;
+    position:absolute;
+    background:#fff;
+    color:red;
+    z-index: 5;
+}
+#field {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+};
+
+</style>
+  </head>
+  <body>
+    <p>Shake your mouse randomly.</p>
+    <div id="field"></div>
+    <script type="text/javascript">
+
+var gwidth = $(window).width() - 200;
+var gheight = $(window).height() - 200;
+var total = 20;
+for(var i = 0;i < total; i++) {
+    $("<div class='chaser'></div>").appendTo("#field");
+}
+
+$(document).ready(function($) {
+    var mouse_x;
+    var mouse_y;
+    $("#field").mousemove(
+        function(e) {
+            mouse_x = e.clientX;
+            mouse_y = e.clientY;
+        }
+    );
+
+    setInterval(function() {
+        Ebisu("mouse near").trigger(mouse_x, mouse_y);
+    }, 25);
+
+    $("div.chaser").each(function(i) {
+        var x = Math.random() * gwidth + 100;
+        var y = Math.random() * gheight + 100;
+
+        $(this).css({ left: x, top: y });
+    });
+
+    Ebisu("mouse near").to("div.chaser").attach(
+        function(loc_x, loc_y) {
+            this.each(function(i) {
+                var x = this.offsetLeft;
+                var y = this.offsetTop;
+                var self = this;
+                var v  = 1/(1+i);
+                var dx = loc_x - x;
+                var dy = loc_y - y;
+
+                var drift_x = ( (Math.random() * 20) - 10 );
+                var drift_y = ( (Math.random() * 20) - 10 );
+
+                setTimeout(function() {
+                    $(self).css({
+                        left: x + dx * v + drift_x,
+                        top:  y + dy * v + drift_y
+                    })
+                }, 0);
+            });
+        }
+    );
+
+});
+
+
+    </script>
+  </body>
+</html>
