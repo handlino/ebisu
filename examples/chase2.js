@@ -14,7 +14,10 @@ $(document).ready(function($) {
         var v  = 1/(1+i);
         var dx = loc_x - x;
         var dy = loc_y - y;
-        $(this).css({ left: x + dx * v, top: y + dy * v })
+
+        x = x + dx * v;
+        y = y + dy * v;
+        $(this).css({ left: x, top: y});
     }
 
     Ebisu("mouse near").attach(function(x, y) {

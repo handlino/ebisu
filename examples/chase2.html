@@ -6,12 +6,23 @@
     <script src="field.js"></script>
     <script src="chase2.js"></script>
 
+    <script type="text/javascript">
+      if(window.location.toString().match(/3d/)) {
+        document.write("<script src='chase2-3d.js'\>\<\/script>");
+      }
+    </script>
+
+
     <title>Chase</title>
 <style type="text/css">
+
+@import "field.css";
+
 body {
     background:black;
     color:white;
 }
+
 .chaser {
     -moz-border-radius: 100px;
     width: 10px;
@@ -21,15 +32,6 @@ body {
     color:red;
     z-index: 5;
 }
-#field {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    overflow: hidden;
-    width: 100%;
-    height: 100%;
-};
 
 </style>
   </head>
